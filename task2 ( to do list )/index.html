@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Projects To-Do List</title>
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <h1>Website Projects To-Do List</h1>
+
+    <form id="add-task-form">
+        <h2>Add a Task</h2>
+        <label for="task-name">Task Name:</label>
+        <input type="text" id="task-name" required>
+
+        <label for="category">Category:</label>
+        <select id="category">
+            <option value="design">Design</option>
+            <option value="development">Development</option>
+            <option value="content">Content</option>
+            <!-- Add more categories as needed -->
+        </select>
+
+        <label for="deadline">Deadline:</label>
+        <input type="date" id="deadline">
+
+        <label for="priority">Priority:</label>
+        <select id="priority">
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+        </select>
+
+        <label for="label">Label:</label>
+        <input type="text" id="label" placeholder="e.g. Urgent, Frontend">
+
+        <button type="submit">Add Task</button>
+    </form>
+
+    <h2>Tasks:</h2>
+    <div id="task-list">
+        <!-- Tasks will be displayed here. Each task can be a 'div' with class 'task' -->
+        <div class="task">
+
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+
+            // Reference to the form and task list
+            const taskForm = document.getElementById('add-task-form');
+            const taskList = document.getElementById('task-list');
+
+            // Handle form submission
+            taskForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+
+                // Get form data
+                let task = document.getElementById('task-name').value;
+                let category = document.getElementById('category').value;
+                let deadline = document.getElementById('deadline').value;
+                let priority = document.getElementById('priority').value;
+                let label = document.getElementById('label').value;
+
+                // Add task to the list
+                const taskDiv = document.createElement('div');
+                taskDiv.className = 'task';
+
+                taskDiv.innerHTML = `
+        <h3>${task} [${category}]</h3>
+        <p>Priority: ${priority} | Deadline: ${deadline} | Label: ${label}
+        </p>
+        <p>Progress: </p>
+       <input type="range" min="0" max="100" value="0" class="task-slider">
+       <progress value="0" max="100"></progress> <span class="progress-value">0%</span>
+
+       <button onclick="this.parentElement.remove()">Delete</button>
+   
+    `;
+
+                taskList.appendChild(taskDiv);
+
+                // Clear the form
+                taskForm.reset();
+            });
+
+            // Handle progress tracking in real-time
+            taskList.addEventListener('input', function (e) {
+                if (e.target && e.target.classList.contains('task-slider')) {
+                    const slider = e.target;
+                    const value = slider.value;
+
+                    // Update the progress bar and display value
+                    const progressBar = slider.nextElementSibling;
+                    const progressValue = progressBar.nextElementSibling;
+
+                    progressBar.value = value;
+                    progressValue.textContent = `${value}%`;
+                }
+            });
+
+        });
+
+
+    </script>
+
+</body>
+
+</html>
